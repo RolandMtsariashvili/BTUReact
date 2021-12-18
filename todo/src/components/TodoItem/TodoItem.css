@@ -1,0 +1,9 @@
+.todoItem {
+    list-style: none;
+    text-align: center;
+    margin: 25px;
+}
+
+.todoItem .done {
+    text-decoration: line-through;
+}

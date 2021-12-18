@@ -1,5 +1,4 @@
 import React from 'react';
-import useGetClassName from '../../hooks/useGetClassName';
 import TodoItem from '../TodoItem';
 import './TodoList.css';
 
@@ -9,10 +8,26 @@ export const TodoList = ({
   setEmptyError,
   setDuplicateNameError,
 }) => {
-  const getClassName = useGetClassName(TodoList.displayName);
+  const moveTodoUp = (index) => {
+    const todoItem = todoItems[index];
+    const previousItem = todoItems[index - 1];
 
-  const editTodoItem = (index, name, isDone) => {
+    if (!previousItem) return;
 
+    const newTodoItems = [...todoItems];
+    newTodoItems[index - 1] = todoItem;
+    newTodoItems[index] = previousItem;
+
+    setTodoItems([...newTodoItems])
+  }
+
+  const setDone = (index, isDone) => {
+    const newTodoItems = [...todoItems];
+    newTodoItems[index].isDone = isDone;
+    setTodoItems(newTodoItems)
+  }
+
+  const editTodoItem = (index, name) => {
     const isDuplicate = todoItems.filter((item) => item.name === name).length;
 
     if (isDuplicate || !name.trim()) {
@@ -24,7 +39,8 @@ export const TodoList = ({
     const newTodoItems = [
       ...todoItems,
     ]
-    newTodoItems[index] = { name, isDone };
+
+    newTodoItems[index] = { name, isDone: todoItems[index].isDone };
     setTodoItems([...newTodoItems]);
 
     setDuplicateNameError(false);
@@ -38,19 +54,20 @@ export const TodoList = ({
   return (
     <div>
       <ul>
-        {todoItems.map((todoItem, index) => (
-          <TodoItem
-            todoItem={todoItem}
-            key={todoItem.name}
-            index={index}
-            editTodoItem={editTodoItem}
-            deleteTodoItem={deleteTodoItem}
-          />
-        ))}
+        {!todoItems.length ? <div>add your first TODO!</div> : (
+          todoItems.map((todoItem, index) => (
+            <TodoItem
+              todoItem={todoItem}
+              key={todoItem.name}
+              index={index}
+              editTodoItem={editTodoItem}
+              deleteTodoItem={deleteTodoItem}
+              moveTodoUp={moveTodoUp}
+              setDone={setDone}
+            />
+          ))
+        )}
       </ul>
-
     </div>
   )
 }
-
-TodoList.displayName = "TodoList";

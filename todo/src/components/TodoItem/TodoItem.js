@@ -1,6 +1,4 @@
 import React, { useState } from 'react';
-import useGetClassName from '../../hooks/useGetClassName';
-
 import './TodoItem.css';
 
 export const TodoItem = ({
@@ -8,45 +6,47 @@ export const TodoItem = ({
   index,
   editTodoItem,
   deleteTodoItem,
+  moveTodoUp,
+  setDone,
 }) => {
-  const getClassName = useGetClassName(todoItem.displayName);
-
   const [ isEditMode, setEditMode ] = useState(false);
   const [ todoItemNewName, setTodoItemNewName ] = useState(todoItem.name);
-  const [ isDone, setIsDone ] = useState(todoItem.isDone);
 
   const onEditSave = () => {
-    editTodoItem(index, todoItemNewName, isDone)
-    setEditMode(false);
+    editTodoItem(index, todoItemNewName)
+  }
+
+  const onIsDoneChange = (event) => {
+    setDone(index, event.target.checked)
   }
 
   return (
-    <li>
-      <span>{todoItem.name}</span>
+    <li className='todoItem'>
+      <span className={todoItem.isDone ? 'done' : ''}>{todoItem.name}</span>
       <button onClick={() => deleteTodoItem(index)}>Delete</button>
-      <button onClick={() => !isEditMode && setEditMode(true)}>Edit</button>
-      {isEditMode ? (
-        <div>
-          <label htmlFor="isDone">
+      <button onClick={() => setEditMode(true)}>Edit</button>
+      <button onClick={() => moveTodoUp(index)}>up</button>
+      <label htmlFor="isDone">
             <span>is done</span>
             <input
               type="checkbox"
               name="isDone"
               id="isDone"
-              checked={isDone}
-              onChange={(e) => setIsDone(e.target.checked)}
+              checked={todoItem.isDone}
+              onChange={onIsDoneChange}
             />
           </label>
+      {isEditMode ? (
+        <div>
           <input
             type="text"
             value={todoItemNewName}
             onChange={(e) => setTodoItemNewName(e.target.value)}
           />
           <button onClick={onEditSave}>Save</button>
+          <button onClick={() => setEditMode(false)}>Done</button>
         </div>
       ): null}
     </li>
   )
 }
-
-TodoItem.displayName = "TodoItem";

@@ -16,13 +16,17 @@ export const AddTodo = ({
 
   return (
     <>
+    <div className="addTodo"></div>
       <input
+        className='addTodoInput'
         value={todoNameValue}
         type="text"
         placeholder="enter todo name"
         onChange={(e) => setTodoNameValue(e.target.value)}
       />
-      <button onClick={onSaveTodo}>Add todo</button>
+      <div>
+        <button onClick={onSaveTodo} className="addTodoButton">Add todo</button>
+      </div>
     </>
   )
 }

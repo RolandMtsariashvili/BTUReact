@@ -1,0 +1,19 @@
+.addTodoInput {
+    display: block;
+    margin: 0 auto;
+    height: 60px;
+    width: 100%;
+}
+
+.addTodoButton {
+    margin: 10px auto;
+    display: block;
+    border: 1px solid black;
+    padding: 10px;
+    background-color: lightblue;
+    cursor: pointer;
+}
+
+.addTodoButton:active {
+    background-color: rgb(141, 197, 216);
+}

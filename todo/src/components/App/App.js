@@ -1,36 +1,30 @@
-import React, { useState } from 'react';
-import useGetClassName from '../../hooks/useGetClassName';
+import React, { useEffect, useState } from 'react';
 import TodoList from '../TodoList';
 import AddTodo from '../AddTodo';
 
 import './App.css';
 
 export const App = () => {
-  const getClassName = useGetClassName(App.displayName);
-  const [todoItems, setTodoItems] = useState([
-    {
-      name: 'commit to open source',
-      isDone: true,
-    },
-    {
-      name: 'do university tasks',
-      isDone: false,
-    }
-  ]);
+  const [todoItems, setTodoItems] = useState(JSON.parse(window.localStorage.getItem('todoItems')));
   
   const [isDuplicateNameError, setDuplicateNameError] = useState(false);
   const [isEmptyError, setEmptyError] = useState(false);
 
-  const addTodo = (itemName) => {
-    const isDuplicate = todoItems.filter((item) => item.name === itemName).length;
+  useEffect(() => {
+    window.localStorage.setItem('todoItems', JSON.stringify(todoItems));
+  }, [todoItems])
 
-    if (isDuplicate || !itemName.trim()) {
+  const addTodo = (itemName) => {
+    const isDuplicate = !!todoItems.filter((item) => item.name === itemName).length;
+    const isEmpty = !itemName.trim();
+
+    if (isDuplicate || isEmpty) {
       setDuplicateNameError(isDuplicate);
-      setEmptyError(!itemName.trim())
+      setEmptyError(isEmpty)
       return;
     }
 
-    !isDuplicate.length && setTodoItems([
+    setTodoItems([
       ...todoItems,
       {
         name: itemName,
@@ -43,7 +37,7 @@ export const App = () => {
   }
 
   return (
-    <div>
+    <div className='App'>
       <TodoList
         todoItems={todoItems}
         setTodoItems={setTodoItems}
@@ -53,8 +47,8 @@ export const App = () => {
       <AddTodo
         addTodo={addTodo}
       />
-      {isDuplicateNameError && <div>todo item with this name already exists</div>}
-      {isEmptyError && <div>you can not add todo with empty name</div>}
+      {isDuplicateNameError && <div className='errorMessage'>todo item with this name already exists</div>}
+      {isEmptyError && <div className='errorMessage'>you can not add todo with empty name</div>}
     </div>
   );
 }
