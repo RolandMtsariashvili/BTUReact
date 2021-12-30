@@ -1,12 +1,9 @@
 import React, { useState } from 'react';
-import useGetClassName from '../../hooks/useGetClassName';
 import './AddTodo.css'
 
 export const AddTodo = ({
   addTodo,
 }) => {
-  const getClassName = useGetClassName(AddTodo.displayName);
-
   const [ todoNameValue, setTodoNameValue ] = useState('');
 
   const onSaveTodo = () => {

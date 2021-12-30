@@ -5,7 +5,7 @@ import AddTodo from '../AddTodo';
 import './App.css';
 
 export const App = () => {
-  const [todoItems, setTodoItems] = useState(JSON.parse(window.localStorage.getItem('todoItems')));
+  const [todoItems, setTodoItems] = useState(JSON.parse(window.localStorage.getItem('todoItems')) || []);
   
   const [isDuplicateNameError, setDuplicateNameError] = useState(false);
   const [isEmptyError, setEmptyError] = useState(false);
